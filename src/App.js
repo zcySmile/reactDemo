@@ -1,26 +1,58 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { Component, Fragment } from 'react'
+import Item from './item'
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class App extends Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      inputValue: '',
+      list: []
+    }
+  }
+  inputChange = e => {
+    this.setState({
+      inputValue: e.target.value
+    })
+  }
+  addService = () => {
+    this.setState({
+      list: [...this.state.list, this.state.inputValue],
+      inputValue: ''
+    })
+  }
+  deleteService = index => {
+    const temp = this.state.list
+    temp.splice(index, 1)
+    this.setState({
+      list: temp
+    })
+  }
+  render() {
+    return (
+      <Fragment>
+        <div>
+          <label htmlFor="input">加入服务</label>
+          <input
+            id="input"
+            value={this.state.inputValue}
+            onChange={this.inputChange}
+          />
+          <button onClick={this.addService}>增加服务</button>
+        </div>
+        <ul>
+          {this.state.list.map((item, index) => {
+            return (
+              <Item
+                name={item}
+                index={index}
+                delete={this.deleteService}
+                key={index + item}
+              />
+            )
+          })}
+        </ul>
+      </Fragment>
+    )
+  }
 }
-
-export default App;
+export default App
